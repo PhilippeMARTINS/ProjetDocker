@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  wordpress:
+    build:
+      context: "C:/Users/phili/Documents/ProjetDocker"
+      dockerfile: "docker-file.frontend"
+    depends_on:
+      - db
+    networks:
+      - frontend_network
+      - backend_network
+    volumes:
+      - wordpress_data:/var/www/html
+    ports:
+      - "8000:80"
+
+  db:
+    build:
+      context: "C:/Users/phili/Documents/ProjetDocker"
+      dockerfile: "docker-file.backend"
+    environment:
+      MYSQL_DATABASE: 'wordpress'
+      MYSQL_USER: 'wordpress'
+      MYSQL_PASSWORD: 'examplepassword'
+      MYSQL_ROOT_PASSWORD: 'rootpassword'
+    networks:
+      - backend_network
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./my.cnf:/etc/mysql/my.cnf
+
+networks:
+  frontend_network:
+  backend_network:
+
+volumes:
+  wordpress_data:
+  mariadb_data:
+
+
